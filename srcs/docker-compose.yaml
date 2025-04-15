@@ -1,0 +1,52 @@
+services:
+  nginx:
+    networks:
+      - inception
+    build:
+      context: nginx
+      dockerfile: Dockerfile
+    ports:
+      - "443:443"
+    restart: on-failure
+  wordpress:
+    networks:
+      - inception
+    build:
+      context: wordpress
+      dockerfile: Dockerfile
+    env_file:
+      - wordpress/.env
+    volumes:
+      - wp:/var/www/html
+    restart: on-failure
+  mariadb:
+    networks:
+      - inception
+    build:
+      context: mariaDB
+      dockerfile: Dockerfile
+    volumes:
+      - mdb:/var/lib/mysql
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+networks:
+  inception:
+    driver: bridge
+
+volumes:
+  mdb:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: /Users/emilebert/Documents/data/mariadb
+  wp:
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: /Users/emilebert/Documents/data/wordpress
