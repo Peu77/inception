@@ -57,6 +57,21 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
+  ftp:
+    networks:
+      - inception
+    build:
+      context: requirements/bonus/ftp
+      dockerfile: Dockerfile
+    ports:
+      - "21:21"
+      - "20:20"
+      - "21100-21110:21100-21110"  # Passive port range
+    volumes:
+      - wp:/var/ftp/wordpress
+    env_file:
+      - secrets/.ftp.env
+    restart: on-failure
 
 networks:
   inception:
