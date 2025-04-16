@@ -1,29 +1,39 @@
 services:
   nginx:
+    depends_on:
+      - wordpress
     networks:
       - inception
+    env_file:
+      - secrets/.env
     build:
-      context: nginx
+      context: requirements/nginx
       dockerfile: Dockerfile
     ports:
       - "443:443"
     restart: on-failure
   wordpress:
+    depends_on:
+      - mariadb
     networks:
       - inception
     build:
-      context: wordpress
+      context: requirements/wordpress
       dockerfile: Dockerfile
     env_file:
-      - wordpress/.env
+      - secrets/.db.env
+      - secrets/.env
     volumes:
       - wp:/var/www/html
     restart: on-failure
+
   mariadb:
     networks:
       - inception
+    env_file:
+      - secrets/.db.env
     build:
-      context: mariaDB
+      context: requirements/mariaDB
       dockerfile: Dockerfile
     volumes:
       - mdb:/var/lib/mysql
@@ -34,6 +44,19 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
+  redis:
+    networks:
+      - inception
+    build:
+      context: requirements/bonus/redis
+      dockerfile: Dockerfile
+    restart: on-failure
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
 
 networks:
   inception:
