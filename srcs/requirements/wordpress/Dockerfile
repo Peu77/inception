@@ -1,9 +1,7 @@
 FROM debian:latest
 
 RUN apt update && apt upgrade -y && \
-    apt install -y php php-fpm php-mysql curl  && \
-    a2enmod proxy_fcgi && \
-    a2enmod rewrite
+    apt install -y php php-fpm php-mysql curl
 
 RUN rm /var/www/html/index.html
 
