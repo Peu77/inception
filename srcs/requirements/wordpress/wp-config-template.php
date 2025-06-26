@@ -57,6 +57,9 @@ define( 'SECURE_AUTH_SALT', 'put your unique phrase here' );
 define( 'LOGGED_IN_SALT',   'put your unique phrase here' );
 define( 'NONCE_SALT',       'put your unique phrase here' );
 
+define( 'WP_REDIS_HOST', 'redis' );
+define( 'WP_REDIS_PORT', 6379 );
+
 /**#@-*/
 
 /**
@@ -99,15 +102,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 define('WP_HOME', 'https://HOME_DOMAIN');
 define('WP_SITEURL', 'https://HOME_DOMAIN');
-define('COOKIE_DOMAIN', 'HOME_DOMAIN');
-define('SITECOOKIEPATH', '/');
-$_SERVER['HTTP_HOST'] = "HOME_DOMAIN";
-$_SERVER['REMOTE_ADDR'] = "https://HOME_DOMAIN";
-$_SERVER['SERVER_ADDR'] = "HOME_DOMAIN";
-if(isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-    $list = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-    $_SERVER['REMOTE_ADDR'] = $list[0];
-}
 
 /** Sets up WordPress vars and included files. */
 require_once ABSPATH . 'wp-settings.php';
