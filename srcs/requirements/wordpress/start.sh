@@ -37,5 +37,9 @@ sed -e "s/\database_name_here/$DB_NAME/g" \
     -e "s/define( 'NONCE_SALT',       'put your unique phrase here' );/define( 'NONCE_SALT',       '$(echo $NONCE_SALT | sed 's/[\/&]/\\&/g')' );/g" \
     /var/www/html/wp-config-template.php > /var/www/html/wp-config.php
 
-# Start Apache
-apache2ctl -D FOREGROUND
+    sed -i 's/listen = \/run\/php\/php8.2-fpm.sock/listen = 9000/g' /etc/php/8.2/fpm/pool.d/www.conf
+
+
+/usr/local/bin/configure.sh
+
+php-fpm8.2 -F
