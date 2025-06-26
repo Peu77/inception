@@ -35,8 +35,6 @@ services:
       - inception
     env_file:
       - secrets/.db.env
-    ports:
-      - "3306:3306"
     build:
       context: requirements/mariaDB
       dockerfile: Dockerfile
@@ -85,6 +83,13 @@ services:
       - "8080:8080"
     depends_on:
       - mariadb
+    restart: on-failure
+  portfolio:
+    build:
+      context: requirements/bonus/portfolio
+      dockerfile: Dockerfile
+    ports:
+      - "8081:5000"
     restart: on-failure
 
 networks:
